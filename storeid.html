@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Local con Impuestos</title>
+    
+    <link rel="stylesheet" href="https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.css">
+    <script type="module" src="https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.js"></script>
+</head>
+<body>
+    <h1>Prueba de Pago: $1.00 + IVA</h1>
+    
+    <div id="pp-button"></div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Generar ID único basado en la hora actual
+            const uniqueId = "Test-" + Date.now(); 
+
+            ppb = new PPaymentButtonBox({
+                // TUS CREDENCIALES
+                token: 'svGSKaAHgu97AQ4sOMFMJn3la20veiaTQLVFRC-kmAjb9NI7An3d6dM2Eho18mfkGB_DU_KWf55SaQIzFf88NrIgqIjLMur5F2uUMCLLHU4VLM9OGHDRYLbKEudb5odIIty05EPvRuFYqeFPOID9zD9evlzdyGhdkJChwtVNp8t8ACNHPiO0CXEZm2BsZ_y5XU8Q_zLysvLUBxFwbrFk8vY_7y3x5YfVP_HQ6VgrmJGaPbz0ZuZoZhFK67xKY_zLjIydBF9knDzROgJ0FoJJT3ttds-MbZqXSoVVK6ZowPY2S-cv9mXqF1d7xPpAGjqOKmADPg', 
+                storeId: "b7ef2a99-e46b-4d23-a180-bebf604f1677", 
+                
+                // DATOS DE TRANSACCIÓN
+                clientTransactionId: uniqueId, 
+                reference: "Prueba Con Impuestos", 
+                
+                
+                amount: 115,          // Total a pagar ($1.15)
+                amountWithTax: 100,   // Base imponible que SÍ paga impuesto ($1.00)
+                amountWithoutTax: 0,  // Base que NO paga impuesto ($0.00)
+                tax: 15,              // El valor del impuesto ($0.15)
+                service: 0,           // Servicio/Propina ($0.00)
+                
+            }).render('pp-button');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Prueba Payphone</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        button {
+            background-color: #ff6600; /* Color naranja Payphone */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover { background-color: #e65c00; }
+    </style>
+</head>
+<body>
+
+    <h1>Producto de Ejemplo</h1>
+    <p>Precio: $10.00</p>
+    
+    <button onclick="pagarConPayphone()">Pagar con Payphone</button>
+
+    <script>
+        async function pagarConPayphone() {
+            // --- CONFIGURACIÓN ---
+            // He mantenido tus credenciales tal como las pusiste
+            const token = "svGSKaAHgu97AQ4sOMFMJn3la20veiaTQLVFRC-kmAjb9NI7An3d6dM2Eho18mfkGB_DU_KWf55SaQIzFf88NrIgqIjLMur5F2uUMCLLHU4VLM9OGHDRYLbKEudb5odIIty05EPvRuFYqeFPOID9zD9evlzdyGhdkJChwtVNp8t8ACNHPiO0CXEZm2BsZ_y5XU8Q_zLysvLUBxFwbrFk8vY_7y3x5YfVP_HQ6VgrmJGaPbz0ZuZoZhFK67xKY_zLjIydBF9knDzROgJ0FoJJT3ttds-MbZqXSoVVK6ZowPY2S-cv9mXqF1d7xPpAGjqOKmADPg"; 
+            const storeId = "b7ef2a99-e46b-4d23-a180-bebf604f1677"; 
+            // ---------------------
+
+            const clientTxId = "transaccion-" + Date.now(); 
+
+            const data = {
+                amount: 1000,           // $10.00 en centavos
+                amountWithoutTax: 1000, // Base 0%
+                currency: "USD",
+                clientTransactionId: clientTxId,
+                storeId: storeId,
+                reference: "Pago prueba estudiantil",
+                responseUrl: "http://127.0.0.1:5500/confirmar.html" 
+            };
+
+            try {
+                // CORRECCIÓN: Aquí estaba el error, faltaba "esposible" en la URL
+                const response = await fetch("https://pay.payphonetodoesposible.com/api/button/prepare", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.payWithCard) {
+                    window.location.href = result.payWithCard;
+                } else {
+                    alert("Error al preparar el pago. Revisa la consola (F12).");
+                    console.log(result);
+                }
+
+            } catch (error) {
+                console.error("Error de conexión:", error);
+                alert("Hubo un error al intentar conectar con Payphone.");
+            }
+        }
+    </script>
+</body>
+</html>
